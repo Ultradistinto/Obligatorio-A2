@@ -32,7 +32,7 @@ int main()
             cin >> id;
 
             // find en avl y lo printea
-            cout << biblioteca.find(id);
+            cout << biblioteca.find(id) << endl;
         }
         else if (entrada == "TOGGLE")
         {
@@ -44,7 +44,7 @@ int main()
         else if (entrada == "COUNT")
         {
             // printea total, habilitados y deshabilitados
-            cout << biblioteca.totales() << " " << biblioteca.habilitadosF() << " " << biblioteca.deshabilitados();
+            cout << biblioteca.totales() << " " << biblioteca.habilitadosF() << " " << biblioteca.deshabilitados() << endl;
         }
     }
 

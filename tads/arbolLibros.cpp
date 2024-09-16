@@ -89,7 +89,7 @@ private:
         if (bf > 1)
         {
             int bfDer = balanceFactor(node->der);
-            if (bfDer > 0)
+            if (bfDer >= 0)
             {
                 node = rotacionIzquierda(node);
             }
@@ -103,13 +103,14 @@ private:
             int bfIzq = balanceFactor(node->izq);
             if (bfIzq > 0)
             {
-                node = rotacionDerecha(node);
-            }
-            else if (bfIzq < 0)
-            {
                 node = rotacionIzquierdaDerecha(node);
             }
+            else if (bfIzq <= 0)
+            {
+                node = rotacionDerecha(node);
+            }
         }
+        return node;
     }
 
     AVLNodeLibro *addAux(AVLNodeLibro *node, int id, string titulo)
@@ -136,6 +137,8 @@ private:
 
         node->altura = 1 + max(altura(node->izq), altura(node->der));
         node = rebalanceo(node);
+
+        return node;
     }
 
     string findAux(AVLNodeLibro *node, int id)
@@ -154,7 +157,7 @@ private:
         }
         else
         {
-            return node->titulo;
+            return node->titulo + " " + node->estado;
         }
     }
 
@@ -162,15 +165,15 @@ private:
     {
         if (node == nullptr)
         {
-            "libro_no_encontrado";
+            return "libro_no_encontrado";
         }
         if (id > node->id)
         {
-            findAux(node->der, id);
+            return toggleAux(node->der, id);
         }
         else if (id < node->id)
         {
-            findAux(node->izq, id);
+            return toggleAux(node->izq, id);
         }
         else
         {
@@ -178,11 +181,13 @@ private:
             {
                 node->estado = "D";
                 habilitados--;
+                return "";
             }
             else
             {
                 node->estado = "H";
                 habilitados++;
+                return "";
             }
         }
     }
