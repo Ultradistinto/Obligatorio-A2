@@ -21,7 +21,8 @@ class tablaHash
 {
 private:
     int largo;
-    int cantidad = 0;
+    int totales = 0;
+    int habilitados = 0;
     HashNodeLibro **buckets;
 
     int hashFunction(int id)
@@ -32,7 +33,7 @@ private:
     {
         return 1 + (id % (largo - 1));
     }
-    // Function to find the next prime (for resizing or rehashing)
+
     int siguientePrimo(int n)
     {
         int retorno = n;
@@ -70,6 +71,26 @@ private:
             retorno++;
         }
     }
+    void resize()
+    {
+        int nuevoLargo = siguientePrimo(largo * 2);
+        int largoViejo = largo;
+        largo = nuevoLargo;
+        int totales = 0;
+        int habilitados = 0;
+        HashNodeLibro **nuevo = new HashNodeLibro *[nuevoLargo];
+        HashNodeLibro **aux = buckets;
+        buckets = nuevo;
+        for (int i = 0; i < largoViejo; i++)
+        {
+            if (aux[i] != nullptr)
+            {
+                add(aux[i]->id, aux[i]->titulo);
+            }
+            delete aux[i];
+        }
+        delete[] aux;
+    }
 
 public:
     tablaHash(int largoSupuesto)
@@ -77,7 +98,7 @@ public:
         this->largo = siguientePrimo(largoSupuesto);
         this->buckets = new HashNodeLibro *[largo];
     }
-    void agregar(int id, string titulo)
+    void add(int id, string titulo)
     {
         int pos = hashFunction(id);
         if (buckets[pos] == nullptr)
@@ -97,9 +118,78 @@ public:
                     buckets[pos] = nuevo;
                     break;
                 }
+                else if (buckets[pos]->id == id)
+                {
+                    buckets[pos]->titulo = titulo;
+                    break;
+                }
                 i++;
             }
         }
-        cantidad++;
+        totales++;
+        habilitados++;
+        if (this->totales * 2 > this->largo)
+        {
+            resize();
+        }
+    }
+    string find(int id)
+    {
+        int i = 0;
+        while (i < largo)
+        {
+            int pos = (hashFunction(id) + i * hashFunction2(id)) % largo;
+            if (buckets[pos] != nullptr)
+            {
+                if (buckets[pos]->id == id)
+                {
+                    return buckets[pos]->titulo + " " + buckets[pos]->estado;
+                }
+            }
+            i++;
+        }
+        return "libro_no_encontrado";
+    }
+    string toggle(int id)
+    {
+        int i = 0;
+        while (i < largo)
+        {
+            int pos = (hashFunction(id) + i * hashFunction2(id)) % largo;
+            if (buckets[pos] != nullptr)
+            {
+                if (buckets[pos]->id == id)
+                {
+                    if (buckets[pos]->estado == "H")
+                    {
+                        buckets[pos]->estado = "D";
+                        habilitados--;
+                    }
+                    else
+                    {
+                        buckets[pos]->estado = "H";
+                        habilitados++;
+                    }
+                    break;
+                }
+            }
+            i++;
+        }
+        return "libro_no_encontrado";
+    }
+
+    int totalesF()
+    {
+        return totales;
+    }
+
+    int habilitadosF()
+    {
+        return habilitados;
+    }
+
+    int deshabilitados()
+    {
+        return totales - habilitados;
     }
 };

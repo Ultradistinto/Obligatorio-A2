@@ -39,7 +39,10 @@ int main()
             int id;
             cin >> id;
             // toggle en el estado del libro con el id
-            biblioteca.toggle(id);
+            if (biblioteca.toggle(id) == "libro_no_encontrado")
+            {
+                cout << "libro_no_encontrado" << endl;
+            }
         }
         else if (entrada == "COUNT")
         {

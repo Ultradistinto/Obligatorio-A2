@@ -203,9 +203,9 @@ public:
         return findAux(root, id);
     }
 
-    void toggle(int id)
+    string toggle(int id)
     {
-        toggleAux(root, id);
+        return toggleAux(root, id);
     }
 
     int totales()
