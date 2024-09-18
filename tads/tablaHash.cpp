@@ -9,10 +9,10 @@ struct HashNodeLibro
     string titulo;
     string estado;
 
-    HashNodeLibro(int id, string titulo)
+    HashNodeLibro(int id, string titulo, string estado)
     {
         this->id = id;
-        this->estado = "H";
+        this->estado = estado;
         this->titulo = titulo;
     }
 };
@@ -29,6 +29,7 @@ private:
     {
         return id % largo;
     }
+
     int hashFunction2(int id)
     {
         return 1 + (id % (largo - 1));
@@ -71,21 +72,22 @@ private:
             retorno++;
         }
     }
+
     void resize()
     {
         int nuevoLargo = siguientePrimo(largo * 2);
         int largoViejo = largo;
         largo = nuevoLargo;
-        int totales = 0;
-        int habilitados = 0;
         HashNodeLibro **nuevo = new HashNodeLibro *[nuevoLargo];
         HashNodeLibro **aux = buckets;
         buckets = nuevo;
+        totales = 0;
+        habilitados = 0;
         for (int i = 0; i < largoViejo; i++)
         {
             if (aux[i] != nullptr)
             {
-                add(aux[i]->id, aux[i]->titulo);
+                add(aux[i]->id, aux[i]->titulo, aux[i]->estado);
             }
             delete aux[i];
         }
@@ -98,13 +100,19 @@ public:
         this->largo = siguientePrimo(largoSupuesto);
         this->buckets = new HashNodeLibro *[largo];
     }
-    void add(int id, string titulo)
+
+    void add(int id, string titulo, string estado)
     {
         int pos = hashFunction(id);
         if (buckets[pos] == nullptr)
         {
-            HashNodeLibro *nuevo = new HashNodeLibro(id, titulo);
+            HashNodeLibro *nuevo = new HashNodeLibro(id, titulo, estado);
             buckets[pos] = nuevo;
+            totales++;
+            if (estado == "H")
+            {
+                habilitados++;
+            }
         }
         else
         {
@@ -114,8 +122,13 @@ public:
                 pos = (hashFunction(id) + (i * hashFunction2(id))) % largo;
                 if (buckets[pos] == nullptr)
                 {
-                    HashNodeLibro *nuevo = new HashNodeLibro(id, titulo);
+                    HashNodeLibro *nuevo = new HashNodeLibro(id, titulo, estado);
                     buckets[pos] = nuevo;
+                    totales++;
+                    if (estado == "H")
+                    {
+                        habilitados++;
+                    }
                     break;
                 }
                 else if (buckets[pos]->id == id)
@@ -126,13 +139,12 @@ public:
                 i++;
             }
         }
-        totales++;
-        habilitados++;
         if (this->totales * 2 > this->largo)
         {
             resize();
         }
     }
+
     string find(int id)
     {
         int i = 0;
@@ -150,6 +162,7 @@ public:
         }
         return "libro_no_encontrado";
     }
+
     string toggle(int id)
     {
         int i = 0;
@@ -164,11 +177,13 @@ public:
                     {
                         buckets[pos]->estado = "D";
                         habilitados--;
+                        return "";
                     }
                     else
                     {
                         buckets[pos]->estado = "H";
                         habilitados++;
+                        return "";
                     }
                     break;
                 }

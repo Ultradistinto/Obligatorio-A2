@@ -23,8 +23,8 @@ int main()
             cin >> id >> titulo;
             // libro con "id" , "titulo" y "estado"
 
-            // agrego libro a avl
-            biblioteca.add(id, titulo);
+            // agrego libro a tabla
+            biblioteca.add(id, titulo, "H");
         }
         else if (entrada == "FIND")
         {
