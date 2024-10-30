@@ -55,7 +55,7 @@ private:
             else
             {
 
-                for (int i = 3; i <= sqrt(retorno); i++)
+                for (int i = 3; i < retorno; i++)
                 {
                     if (retorno % i == 0)
                     {

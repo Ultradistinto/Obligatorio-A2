@@ -132,6 +132,7 @@ private:
         else
         {
             node->titulo = titulo;
+            node->estado = "H";
             return node;
         }
 

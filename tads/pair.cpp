@@ -1,29 +1,34 @@
 #include <iostream>
 #include <string>
+
 using namespace std;
 
+template <typename T1, typename T2>
 class myPair
 {
 private:
-    int fst;
-    int snd;
+    T1 fst;
+    T2 snd;
 
 public:
-    myPair(int fst, int snd)
+    myPair(T1 fst, T2 snd)
     {
         this->fst = fst;
         this->snd = snd;
     }
+
     myPair()
     {
-        this->fst = 0;
-        this->snd = 0;
+        this->fst = T1();
+        this->snd = T2();
     }
-    int getSnd()
+
+    T2 getSnd()
     {
         return snd;
     }
-    int getFst()
+
+    T1 getFst()
     {
         return fst;
     }

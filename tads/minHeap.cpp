@@ -1,20 +1,22 @@
 #include <iostream>
 #include <string>
 #include "pair.cpp"
+
 using namespace std;
 
 class minHeap
 {
 private:
-    myPair *array;
+    myPair<int, int> *array;
     int cantidad;
 
     void swap(int pos1, int pos2)
     {
-        myPair aux = array[pos1];
+        myPair<int, int> aux = array[pos1];
         array[pos1] = array[pos2];
         array[pos2] = aux;
     }
+
     void siftDown(int pos)
     {
         if (pos > cantidad)
@@ -26,21 +28,24 @@ private:
         int der = (pos * 2) + 1;
         int min = pos;
 
-        if (izq > cantidad)
+        if (izq <= cantidad)
         {
-            return;
+            if (array[izq].getSnd() < array[min].getSnd() ||
+                (array[izq].getSnd() == array[min].getSnd() && array[izq].getFst() > array[min].getFst()))
+            {
+                min = izq;
+            }
         }
-        else if (der > cantidad)
+
+        if (der <= cantidad)
         {
+            if (array[der].getSnd() < array[min].getSnd() ||
+                (array[der].getSnd() == array[min].getSnd() && array[der].getFst() > array[min].getFst()))
+            {
+                min = der;
+            }
         }
-        else if (array[izq].getSnd() < array[min].getSnd())
-        {
-            min = izq;
-        }
-        if (array[der].getSnd() < array[min].getSnd())
-        {
-            min = der;
-        }
+
         if (min != pos)
         {
             swap(pos, min);
@@ -54,30 +59,34 @@ private:
         {
             return;
         }
-        if (((array[pos / 2])).getSnd() > array[pos].getSnd())
+
+        int parent = pos / 2;
+        if (array[parent].getSnd() > array[pos].getSnd() ||
+            (array[parent].getSnd() == array[pos].getSnd() && array[parent].getFst() < array[pos].getFst()))
         {
-            swap(pos, pos / 2);
-            siftUp(pos / 2);
+            swap(pos, parent);
+            siftUp(parent);
         }
     }
 
 public:
     minHeap(int cantidadEsperada)
     {
-        array = new myPair[cantidadEsperada + 1];
+        array = new myPair<int, int>[cantidadEsperada + 1];
         cantidad = 0;
     }
+
     void add(int id, int precio)
     {
-        myPair par = myPair(id, precio);
+        myPair<int, int> par(id, precio);
         cantidad++;
         array[cantidad] = par;
         siftUp(cantidad);
     }
 
-    myPair pop()
+    myPair<int, int> pop()
     {
-        myPair retorno = array[1];
+        myPair<int, int> retorno = array[1];
         array[1] = array[cantidad];
         cantidad--;
         siftDown(1);

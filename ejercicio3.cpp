@@ -8,7 +8,9 @@ int main()
     cin >> n;
     int id, precio;
     bool lista[n + 1];
-    minHeap objetos = minHeap(n + 1);
+
+    minHeap objetos(n + 1);
+
     for (int i = 0; i < n; i++)
     {
         cin >> id >> precio;
@@ -16,13 +18,14 @@ int main()
     }
     int k;
     cin >> k;
-    for (int i = 0; i < k; i++)
+    while (k > 0)
     {
-        myPair popeado = objetos.pop();
+        myPair<int, int> popeado = objetos.pop();
         if (!lista[popeado.getFst()])
         {
             cout << popeado.getFst() << endl;
             lista[popeado.getFst()] = true;
+            k--;
         }
     }
     return 0;
