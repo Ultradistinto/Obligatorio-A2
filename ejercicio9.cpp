@@ -6,7 +6,11 @@ int main()
 {
     int j;
     cin >> j;
-    int jugadores[j][3];
+    int** jugadores = new int*[j];
+    for(int i = 0; i < j; i++){
+        jugadores[i] = new int[3];
+    }
+
     int valoracion, Ritmo, Tiro, Pase, Regate, Defensa, Fisico, Salario, presupuesto, cupoExtranjeros;
     string formaFisica, Extranjero, Confianza;
     for (int i = 0; i < j; i++)
@@ -51,20 +55,18 @@ int main()
     }
     cin >> presupuesto >> cupoExtranjeros;
 
-    int respuesta[j + 1][presupuesto + 1][12];
+    int**** respuesta = new int***[j + 1];
+    for(int i = 0; i <= j; i++){
+        respuesta[i] = new int**[presupuesto + 1];
+        for(int k = 0; k <= presupuesto; k++){
+            respuesta[i][k] = new int* [12];
+            for(int m = 0; m <= 11; m++){
+                respuesta[i][k][m] = new int[cupoExtranjeros];
+            }
+        }
+    }
 
-    for (int i = 0; i <= j; i++)
-    {
-        respuesta[i][0][0] = 0;
-    }
-    for (int i = 0; i <= presupuesto; i++)
-    {
-        respuesta[0][i][0] = 0;
-    }
-    for (int i = 0; i <= 11; i++)
-    {
-        respuesta[0][0][i] = 0;
-    }
+    
 
     for (int i = 1; i <= j; i++)
     {
@@ -72,25 +74,18 @@ int main()
         {
             for (int m = 1; m <= 11; m++)
             {
-                if (jugadores[i - 1][1] <= k)
-                {
-                    if (respuesta[i - 1][k][m] > respuesta[i - 1][k - jugadores[i - 1][1]][m - 1] + jugadores[i - 1][0])
-                    {
-                        respuesta[i][k][m] = respuesta[i - 1][k][m];
+                for(int r = 1; r <= cupoExtranjeros; r++){
+                    if(jugadores[i - 1][1] <=k){
+                        respuesta[i][k][m][r] = max(respuesta[i - 1][k][m][r], respuesta[i - 1][k - jugadores[i - 1][1]][m][r] + jugadores[i - 1][0]);
                     }
-                    else
-                    {
-                        respuesta[i][k][m] = respuesta[i - 1][k - jugadores[i - 1][1]][m - 1] + jugadores[i - 1][0];
+                    else{
+                        respuesta[i][k][m][r] = respuesta[i - 1][k][m][r];
                     }
-                }
-                else
-                {
-                    respuesta[i][k][m] = respuesta[i - 1][k][m];
                 }
             }
         }
     }
-    cout << respuesta[j][presupuesto][12];
+    cout << respuesta[j][presupuesto][11][cupoExtranjeros];
 
     return 0;
 }
