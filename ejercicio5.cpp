@@ -2,9 +2,9 @@
 #include "tads/minHeap.cpp"
 using namespace std;
 
-int n;
 int main()
 {
-
+    int n;
+    cin >> n;
     return 0;
 }
