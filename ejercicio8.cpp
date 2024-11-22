@@ -2,7 +2,15 @@
 #include <cmath>
 using namespace std;
 
-void ordenar(int **&puntos, int parte, int n)
+double** shaco = new double*[2];
+
+double max(double A, double B){
+    if(A >= B)
+        return A;
+    return B;
+}
+
+void ordenar(double **puntos, int parte, int n)
 {
     for (int i = 0; i < n - 1; ++i)
     {
@@ -14,13 +22,13 @@ void ordenar(int **&puntos, int parte, int n)
                 min_idx = j;
             }
         }
-        int *aux = puntos[i];
+        double *aux = puntos[i];
         puntos[i] = puntos[min_idx];
         puntos[min_idx] = aux;
     }
 }
 
-double distancia(int *A, int *B)
+double distancia(double *A, double *B)
 {
     double distFisica = sqrt((A[0] - B[0]) * (A[0] - B[0]) + (A[1] - B[1]) * (A[1] - B[1]));
     double distPob = abs(A[2] - B[2]) / max(A[2], B[2]);
@@ -28,9 +36,10 @@ double distancia(int *A, int *B)
     return distFisica + distPob;
 }
 
-double casoBase(int **puntos, int left, int right)
+double casoBase(double **puntos, int left, int right, double** &shaco)
 {
-    double minDist = INT8_MAX;
+    double minDist = double(INT8_MAX);
+    double** retorno = new double*[2];
     for (int i = left; i < right; i++)
     {
         for (int j = i + 1; j < right; j++)
@@ -38,13 +47,16 @@ double casoBase(int **puntos, int left, int right)
             if (distancia(puntos[i], puntos[j]) < minDist)
             {
                 minDist = distancia(puntos[i], puntos[j]);
+                
+                shaco[0] = puntos[i];
+                shaco[1] = puntos[j];
             }
         }
     }
     return minDist;
 }
 
-double elMasCercano(int **puntos, int final, int minDist)
+double elMasCercano(double **puntos, int final, double minDist)
 {
     double minimo = minDist;
 
@@ -57,17 +69,19 @@ double elMasCercano(int **puntos, int final, int minDist)
             if (distancia(puntos[j], puntos[i]) < minimo)
             {
                 minimo = distancia(puntos[j], puntos[i]);
+                shaco[0] = puntos[j];
+                shaco[1] = puntos[i];
             }
         }
     }
     return minimo;
 }
 
-double minimaDistancia(int **&puntos, int left, int right)
+double minimaDistancia(double **puntos, int left, int right)
 {
     if (right - left <= 3)
     {
-        return casoBase(puntos, left, right);
+        return casoBase(puntos, left, right, shaco);
     }
 
     int mid = left + (right - left) / 2;
@@ -77,10 +91,10 @@ double minimaDistancia(int **&puntos, int left, int right)
 
     double minDist = min(dl, dr);
 
-    int **masCercanos = new int *[right - left];
+    double **masCercanos = new double *[right - left];
     for (int i = left; i < right; i++)
     {
-        masCercanos[i] = new int[3];
+        masCercanos[i] = new double[3];
     }
     int j = 0;
     for (int i = left; i < right; i++)
@@ -98,17 +112,15 @@ int main()
 {
     int n;
     cin >> n;
-    int **ciudades = new int *[n];
+    double **ciudades = new double *[n];
     for (int i = 0; i < n; i++)
     {
-        ciudades[i] = new int[3];
+        ciudades[i] = new double[3];
         cin >> ciudades[i][0] >> ciudades[i][1] >> ciudades[i][2];
     }
     ordenar(ciudades, 0, n);
-    for (int i = 0; i < n; i++)
-    {
-        cout << ciudades[i][0] << " " << ciudades[i][1] << " " << ciudades[i][2] << endl;
-    }
 
-    cout << minimaDistancia(ciudades, 0, n - 1);
+    minimaDistancia(ciudades, 0, n - 1);
+    cout<<shaco[0][0]<<" " << shaco[0][1] << " " << shaco[0][2] << endl;
+    cout<<shaco[1][0]<<" " << shaco[1][1] << " " << shaco[1][2];
 }
