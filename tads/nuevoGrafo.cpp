@@ -1,7 +1,4 @@
 #include <iostream>
-#include "minHeap.cpp"
-#include "pair.cpp"
-
 using namespace std;
 
 class nuevoGrafo

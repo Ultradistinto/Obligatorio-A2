@@ -1,9 +1,25 @@
 #include <iostream>
 #include <string>
-#include "tads/minHeap.cpp"
 #include "tads/nuevoGrafo.cpp"
 
 using namespace std;
+int* caminoInvertido(int* aRecorrer, int desde){
+    int largo = 1;
+    int paso = desde;
+    while (paso != 0){
+        largo ++;
+        paso = aRecorrer[paso];
+    }
+    int* ret = new int[largo];
+    paso = desde;
+    while (paso != 0){
+        ret[largo] = paso; 
+        paso = aRecorrer[paso];
+        largo --;
+    }
+    ret[0] = largo - 1;
+    return ret;
+}
 
 int main()
 {
@@ -72,21 +88,4 @@ int main()
     }
 
     return 0;
-}
-int* caminoInvertido(int* aRecorrer, int desde){
-    int largo = 1;
-    int paso = desde;
-    while (paso != 0){
-        largo ++;
-        paso = aRecorrer[paso];
-    }
-    int* ret = new int[largo];
-    paso = desde;
-    while (paso != 0){
-        ret[largo] = paso; 
-        paso = aRecorrer[paso];
-        largo --;
-    }
-    ret[0] = largo - 1;
-    return ret;
 }
