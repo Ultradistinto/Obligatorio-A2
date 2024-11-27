@@ -83,8 +83,7 @@ int main()
             {
                 for (int m = 1; m <= 11; m++)
                 {
-
-                    for (int r = 0; r <= cupoExtranjeros; r++)
+                    for (int r = 1; r <= cupoExtranjeros; r++)
                     {
 
                         if (jugadores[i - 1][1] <= k)

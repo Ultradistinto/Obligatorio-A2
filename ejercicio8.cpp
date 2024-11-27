@@ -2,10 +2,15 @@
 #include <cmath>
 using namespace std;
 
-double** shaco = new double*[2];
-
-double max(double A, double B){
-    if(A >= B)
+double max(double A, double B)
+{
+    if (A >= B)
+        return A;
+    return B;
+}
+double min(double A, double B)
+{
+    if (A <= B)
         return A;
     return B;
 }
@@ -36,18 +41,18 @@ double distancia(double *A, double *B)
     return distFisica + distPob;
 }
 
-double casoBase(double **puntos, int left, int right, double** &shaco)
+double casoBase(double **puntos, int left, int right, double **&shaco)
 {
     double minDist = double(INT8_MAX);
-    double** retorno = new double*[2];
     for (int i = left; i < right; i++)
     {
         for (int j = i + 1; j < right; j++)
         {
-            if (distancia(puntos[i], puntos[j]) < minDist)
+            double dist = distancia(puntos[i], puntos[j]);
+
+            if (dist < minDist)
             {
-                minDist = distancia(puntos[i], puntos[j]);
-                
+                minDist = dist;
                 shaco[0] = puntos[i];
                 shaco[1] = puntos[j];
             }
@@ -56,19 +61,19 @@ double casoBase(double **puntos, int left, int right, double** &shaco)
     return minDist;
 }
 
-double elMasCercano(double **puntos, int final, double minDist)
+double elMasCercano(double **puntos, int final, double minDist, double **&shaco)
 {
     double minimo = minDist;
-
-    ordenar(puntos, 1, final);
 
     for (int i = 0; i < final; i++)
     {
         for (int j = i + 1; j < final && (puntos[j][1] - puntos[i][1]) < minimo; j++)
         {
-            if (distancia(puntos[j], puntos[i]) < minimo)
+            double dist = distancia(puntos[j], puntos[i]);
+
+            if (dist < minimo)
             {
-                minimo = distancia(puntos[j], puntos[i]);
+                minimo = dist;
                 shaco[0] = puntos[j];
                 shaco[1] = puntos[i];
             }
@@ -77,7 +82,7 @@ double elMasCercano(double **puntos, int final, double minDist)
     return minimo;
 }
 
-double minimaDistancia(double **puntos, int left, int right)
+double minimaDistancia(double **puntos, int left, int right, double **&shaco)
 {
     if (right - left <= 3)
     {
@@ -86,16 +91,17 @@ double minimaDistancia(double **puntos, int left, int right)
 
     int mid = left + (right - left) / 2;
 
-    double dl = minimaDistancia(puntos, left, mid);
-    double dr = minimaDistancia(puntos, mid + 1, right);
+    double dl = minimaDistancia(puntos, left, mid, shaco);
+    double dr = minimaDistancia(puntos, mid + 1, right, shaco);
 
     double minDist = min(dl, dr);
 
-    double **masCercanos = new double *[right - left];
-    for (int i = left; i < right; i++)
+    double **masCercanos = new double *[right - left + 1];
+    for (int i = 0; i < right - left; i++)
     {
-        masCercanos[i] = new double[3];
+        masCercanos[i] = nullptr;
     }
+
     int j = 0;
     for (int i = left; i < right; i++)
     {
@@ -105,11 +111,19 @@ double minimaDistancia(double **puntos, int left, int right)
             j++;
         }
     }
-    return min(minDist, elMasCercano(masCercanos, j, minDist));
+    double retorno = min(minDist, elMasCercano(masCercanos, j, minDist, shaco));
+
+    delete[] masCercanos;
+
+    return retorno;
 }
 
 int main()
 {
+    double **shaco = new double *[2];
+    shaco[0] = new double[3];
+    shaco[1] = new double[3];
+
     int n;
     cin >> n;
     double **ciudades = new double *[n];
@@ -120,7 +134,16 @@ int main()
     }
     ordenar(ciudades, 0, n);
 
-    minimaDistancia(ciudades, 0, n - 1);
-    cout<<shaco[0][0]<<" " << shaco[0][1] << " " << shaco[0][2] << endl;
-    cout<<shaco[1][0]<<" " << shaco[1][1] << " " << shaco[1][2];
+    minimaDistancia(ciudades, 0, n - 1, shaco);
+    cout << shaco[0][0] << " " << shaco[0][1] << " " << shaco[0][2] << endl;
+    cout << shaco[1][0] << " " << shaco[1][1] << " " << shaco[1][2];
+
+    for (int i = 0; i < n; i++)
+    {
+        delete[] ciudades[i];
+    }
+    delete[] ciudades;
+    delete[] shaco;
+
+    return 0;
 }
