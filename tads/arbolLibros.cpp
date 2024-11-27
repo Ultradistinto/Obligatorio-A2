@@ -132,6 +132,10 @@ private:
         else
         {
             node->titulo = titulo;
+            if (node->estado == "D")
+            {
+                habilitados++;
+            }
             node->estado = "H";
             return node;
         }

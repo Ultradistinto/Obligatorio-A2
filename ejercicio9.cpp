@@ -7,8 +7,6 @@ int main()
     int j;
     cin >> j;
 
-    cout << "Number of players: " << j << endl;
-
     int **jugadores = new int *[j];
     for (int i = 0; i < j; i++)
     {
@@ -19,7 +17,6 @@ int main()
     for (int i = 0; i < j; i++)
     {
         cin >> Ritmo >> Tiro >> Pase >> Regate >> Defensa >> Fisico >> formaFisica >> Salario >> Extranjero >> Confianza;
-        cout << "Ritmo: " << Ritmo << " Tiro: " << Tiro << " Pase: " << Pase << " Regate: " << Regate << " Defensa: " << Defensa << " Fisico: " << Fisico << " Salario: " << Salario << " formaFisica: " << formaFisica << " Extranjero: " << Extranjero << " Confianza: " << Confianza << endl;
         valoracion = (Ritmo + Tiro + Pase + Regate + Defensa + Fisico) / 6;
 
         if (Confianza == "Alta")
@@ -55,12 +52,10 @@ int main()
         {
             jugadores[i][2] = 0;
         }
-        cout << valoracion << endl;
     }
 
     cin >> presupuesto >> cupoExtranjeros;
 
-    cout << "Presupuesto: " << presupuesto << ", Cupo Extranjeros: " << cupoExtranjeros << endl;
     if (cupoExtranjeros > 0)
     {
         int ****respuesta = new int ***[j + 1];
@@ -106,7 +101,7 @@ int main()
             }
         }
         int final = respuesta[j][presupuesto][11][cupoExtranjeros] / 11;
-        cout << final;
+        cout << final << endl;
     }
     else
     {
@@ -144,7 +139,7 @@ int main()
             }
         }
         int final = respuesta[j][presupuesto][11] / 11;
-        cout << final;
+        cout << final << endl;
     }
 
     return 0;

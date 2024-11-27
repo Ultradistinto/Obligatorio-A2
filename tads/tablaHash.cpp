@@ -54,8 +54,7 @@ private:
             }
             else
             {
-
-                for (int i = 3; i < retorno; i++)
+                for (int i = 3; i < retorno; i += 2)
                 {
                     if (retorno % i == 0)
                     {
@@ -77,7 +76,7 @@ private:
         int nuevoLargo = siguientePrimo(largo * 2);
         int largoViejo = largo;
         largo = nuevoLargo;
-        HashNodeLibro **nuevo = new HashNodeLibro *[nuevoLargo];
+        HashNodeLibro **nuevo = new HashNodeLibro *[nuevoLargo]();
         HashNodeLibro **aux = buckets;
         buckets = nuevo;
         totales = 0;
@@ -87,8 +86,8 @@ private:
             if (aux[i] != nullptr)
             {
                 add(aux[i]->id, aux[i]->titulo, aux[i]->estado);
+                delete aux[i];
             }
-            delete aux[i];
         }
         delete[] aux;
     }
@@ -97,12 +96,18 @@ public:
     tablaHash(int largoSupuesto)
     {
         this->largo = siguientePrimo(largoSupuesto);
-        this->buckets = new HashNodeLibro *[largo];
+        this->buckets = new HashNodeLibro *[largo]();
     }
 
     void add(int id, string titulo, string estado)
     {
         int pos = hashFunction(id);
+        int i = 0;
+        while (buckets[pos] != nullptr && buckets[pos]->id != id)
+        {
+            i++;
+            pos = (hashFunction(id) + (i * hashFunction2(id))) % largo;
+        }
         if (buckets[pos] == nullptr)
         {
             HashNodeLibro *nuevo = new HashNodeLibro(id, titulo, estado);
@@ -115,28 +120,12 @@ public:
         }
         else
         {
-            int i = 1;
-            while (true)
+            buckets[pos]->titulo = titulo;
+            if (buckets[pos]->estado == "D")
             {
-                pos = (hashFunction(id) + (i * hashFunction2(id))) % largo;
-                if (buckets[pos] == nullptr)
-                {
-                    HashNodeLibro *nuevo = new HashNodeLibro(id, titulo, estado);
-                    buckets[pos] = nuevo;
-                    totales++;
-                    if (estado == "H")
-                    {
-                        habilitados++;
-                    }
-                    break;
-                }
-                else if (buckets[pos]->id == id)
-                {
-                    buckets[pos]->titulo = titulo;
-                    break;
-                }
-                i++;
+                habilitados++;
             }
+            buckets[pos]->estado = "H";
         }
         if (this->totales * 2 > this->largo)
         {
@@ -184,7 +173,6 @@ public:
                         habilitados++;
                         return "";
                     }
-                    break;
                 }
             }
             i++;

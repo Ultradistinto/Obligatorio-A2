@@ -2,17 +2,6 @@
 #include <string>
 using namespace std;
 
-void printMat(int **mat, int n)
-{
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n; j++)
-        {
-            cout << mat[i][j] << " ";
-        }
-        cout << endl;
-    }
-}
 void ponerFlor(int **mat, int i, int j, int Flor)
 {
     mat[i][j] = Flor;
@@ -76,8 +65,6 @@ void floresBT(int **mat, int *restricciones, int n, int fila, int columna, int c
         {
             floresMax = floresActuales;
         }
-        cout << "Reached end with " << floresActuales << " flowers." << endl;
-        printMat(mat, n);
         return;
     }
     if (columna >= n)
@@ -124,6 +111,6 @@ int main()
     int floresMax = 0;
 
     floresBT(jardin, restricciones, n, 0, 0, F, 0, floresMax);
-    cout << floresMax;
+    cout << floresMax << endl;
     return 0;
 }
