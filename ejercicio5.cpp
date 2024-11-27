@@ -30,17 +30,18 @@ int main()
     cin >> C >> O;
     int ciudadInicio = O;
     nuevoGrafo grafoCiudades(C, 0);
-    string *listaNombreMisiones = new string[C + 1];
+    string *listaNombreCiudades = new string[C + 1];
     for (int i = 0; i < C; i++)
     {
         cin >> idCiudad >> nombreCiudad;
-        listaNombreMisiones[idCiudad] = nombreCiudad;
+        listaNombreCiudades[idCiudad] = nombreCiudad;
     }
     int E, ciudadSalida, ciudadEntrada, tiempo;
     cin >> E;
     for (int i = 0; i < E; i++)
     {
         cin >> ciudadSalida >> ciudadEntrada >> tiempo;
+        grafoCiudades.agregarAristaNoDirigida(ciudadSalida, ciudadEntrada, tiempo);
     }
 
     return 0;
