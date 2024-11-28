@@ -81,15 +81,13 @@ int main()
             }
         }
         lista<int> caminoAlaMision = caminoInvertido(anteriores, ciudadInicio);
-        int aux = 0;
+        int trampa = 0;
         while (caminoAlaMision.obtenerCantidad() != 0)
         {   
-            if(aux != 0){
-                int ciudadAprintear = caminoAlaMision.obtenerHead();
-                cout << listaNombreCiudades[ciudadAprintear]; // recorrido desde C hasta donde se hace la mision
-                cout << " -> ";
-            }
-            aux++;
+            int ciudadAprintear = caminoAlaMision.obtenerHead();
+            cout << listaNombreCiudades[ciudadAprintear]; // recorrido desde C hasta donde se hace la mision
+            if(trampa != 0){ cout << " -> ";};
+            trampa++;
         }
         cout << "Mision: ";
         cout << listaNombreMisiones[idSiguienteMision];
