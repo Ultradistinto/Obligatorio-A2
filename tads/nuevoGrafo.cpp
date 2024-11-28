@@ -78,7 +78,7 @@ public:
         ret[1] = new int[cantVertices];
         bool* visitado = new bool[cantVertices];
 
-        for (int i = 1; i < cantVertices; i++) {
+        for (int i = 0; i < cantVertices; i++) {
             ret[0][i] = 2147483647;
             visitado[i] = false;
         }
