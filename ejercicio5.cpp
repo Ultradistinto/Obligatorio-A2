@@ -3,19 +3,22 @@
 #include "tads/nuevoGrafo.cpp"
 
 using namespace std;
-int* caminoInvertido(int* aRecorrer, int desde){
+int *caminoInvertido(int *aRecorrer, int desde)
+{
     int largo = 1;
     int paso = desde;
-    while (paso != 0){
-        largo ++;
+    while (paso != 0)
+    {
+        largo++;
         paso = aRecorrer[paso];
     }
-    int* ret = new int[largo];
+    int *ret = new int[largo];
     paso = desde;
-    while (paso != 0){
-        ret[largo] = paso; 
+    while (paso != 0)
+    {
+        ret[largo] = paso;
         paso = aRecorrer[paso];
-        largo --;
+        largo--;
     }
     ret[0] = largo - 1;
     return ret;
@@ -61,20 +64,24 @@ int main()
     }
     cout << "Ciudad inicial: ";
     cout << ciudadSalida;
-    int* posiblesMisiones = grafoMisiones.getMisionesPosibles();
-    while (posiblesMisiones[0] != 0){
+    int *posiblesMisiones = grafoMisiones.getMisionesPosibles();
+    while (posiblesMisiones[0] != 0)
+    {
         int min = 2147483647;
-        int** minimaDistancia = grafoCiudades.dijkstra(C);
+        int **minimaDistancia = grafoCiudades.dijkstra(C);
         int idSiguienteMision = 0;
-        for (int i = 0; i < M && posiblesMisiones[i] != 0; i++){
-            if(minimaDistancia[0][i] < min){
+        for (int i = 0; i < M && posiblesMisiones[i] != 0; i++)
+        {
+            if (minimaDistancia[0][i] < min)
+            {
                 min = minimaDistancia[0][i];
                 idSiguienteMision = posiblesMisiones[i];
             }
         }
-        int* caminoAlaMision = caminoInvertido(minimaDistancia[1], C);
-        for (int i = 1; i < caminoAlaMision[0]; i++){
-            cout << listaNombreCiudades[caminoAlaMision[i]]; //recorrido desde C hasta donde se hace la mision
+        int *caminoAlaMision = caminoInvertido(minimaDistancia[1], C);
+        for (int i = 1; i < caminoAlaMision[0]; i++)
+        {
+            cout << listaNombreCiudades[caminoAlaMision[i]]; // recorrido desde C hasta donde se hace la mision
             cout << " -> ";
         }
         cout << "Mision: ";
