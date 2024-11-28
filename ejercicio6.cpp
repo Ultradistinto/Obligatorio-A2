@@ -13,46 +13,37 @@ int main()
     string nombreCiudad;
     cin >> cantCiudades;
 
-    cout << "Número de ciudades: " << cantCiudades << endl; // Debugging
-
     string *listaCiudades = new string[cantCiudades + 1];
 
     for (int i = 0; i < cantCiudades; i++)
     {
         cin >> idCiudad >> nombreCiudad;
         listaCiudades[idCiudad] = nombreCiudad;
-        cout << "Ciudad " << idCiudad << ": " << nombreCiudad << endl; // Debugging
     }
 
     int S, E, T, P;
     cin >> S >> E >> T >> P;
-    cout << "Datos de entrada: S=" << S << ", E=" << E << ", T=" << T << ", P=" << P << endl; // Debugging
 
     nuevoGrafo grafoCiudadesE(cantCiudades, 0);
     nuevoGrafo grafoCiudadesT(cantCiudades, 0);
 
     int cantAristas, ciudadSalida, ciudadLlegada, tiempo;
     cin >> cantAristas;
-    cout << "Número de aristas: " << cantAristas << endl; // Debugging
 
     for (int i = 0; i < cantAristas; i++)
     {
         cin >> ciudadSalida >> ciudadLlegada >> tiempo;
         grafoCiudadesE.agregarAristaNoDirigida(ciudadSalida, ciudadLlegada, tiempo);
         grafoCiudadesT.agregarAristaNoDirigida(ciudadSalida, ciudadLlegada, tiempo);
-        cout << "Arista: " << ciudadSalida << " -> " << ciudadLlegada << " con tiempo " << tiempo << endl; // Debugging
     }
 
     int **arraysDijkstraInicial = grafoCiudadesE.dijkstra(S);
     int *costos = arraysDijkstraInicial[0];
     int *ant = arraysDijkstraInicial[1];
 
-    // Entity es nuestro destino
     int costoTotalE = costos[E];
     int *caminoS_E = new int[10];
     int contadorE1 = 1;
-
-    cout << "Costo inicial de E: " << costoTotalE << endl; // Debugging
 
     int indice = E;
     int aux;
@@ -64,10 +55,9 @@ int main()
         indice = ant[indice];
         int nuevoPeso = grafoCiudadesE.pesoArista(indice, aux) * 2;
         grafoCiudadesE.agregarAristaNoDirigida(indice, aux, nuevoPeso);
-        cout << "En el camino de S a E: ciudad " << indice << " -> " << aux << " con nuevo peso " << nuevoPeso << endl; // Debugging
     }
-
     contadorE1--;
+
     int **arraysDijkstraE_T = grafoCiudadesE.dijkstra(E);
     int *costosE_T = arraysDijkstraE_T[0];
     int *antE_T = arraysDijkstraE_T[1];
@@ -75,8 +65,6 @@ int main()
 
     int *caminoE_T = new int[10];
     int contadorE2 = 1;
-
-    cout << "Costo de E a T: " << costosE_T[T] << endl; // Debugging
 
     indice = T;
     while (indice != E && indice != 0)
@@ -87,7 +75,6 @@ int main()
         indice = antE_T[indice];
         int nuevoPeso = grafoCiudadesE.pesoArista(indice, aux) * 2;
         grafoCiudadesE.agregarAristaNoDirigida(indice, aux, nuevoPeso);
-        cout << "En el camino de E a T: ciudad " << indice << " -> " << aux << " con nuevo peso " << nuevoPeso << endl; // Debugging
     }
     contadorE2--;
 
@@ -99,8 +86,6 @@ int main()
     int *caminoT_P = new int[10];
     int contadorE3 = 1;
 
-    cout << "Costo de T a P: " << costosT_P[P] << endl; // Debugging
-
     indice = P;
     while (indice != T && indice != 0)
     {
@@ -110,7 +95,6 @@ int main()
         indice = antT_P[indice];
         int nuevoPeso = grafoCiudadesE.pesoArista(indice, aux) * 2;
         grafoCiudadesE.agregarAristaNoDirigida(indice, aux, nuevoPeso);
-        cout << "En el camino de T a P: ciudad " << indice << " -> " << aux << " con nuevo peso " << nuevoPeso << endl; // Debugging
     }
     contadorE3--;
 
@@ -120,19 +104,15 @@ int main()
     int *caminoS_T = new int[10];
     int contadorT1 = 1;
 
-    cout << "Costo inicial de T: " << costoTotalT << endl; // Debugging
-
     indice = T;
     while (indice != S && indice != 0)
     {
         caminoS_T[contadorT1] = ant[indice];
         contadorT1++;
-
         aux = indice;
         indice = ant[indice];
         int nuevoPeso = grafoCiudadesT.pesoArista(indice, aux) * 2;
         grafoCiudadesT.agregarAristaNoDirigida(indice, aux, nuevoPeso);
-        cout << "En el camino de S a T: ciudad " << indice << " -> " << aux << " con nuevo peso " << nuevoPeso << endl; // Debugging
     }
     contadorT1--;
 
@@ -144,23 +124,19 @@ int main()
     int *caminoT_E = new int[10];
     int contadorT2 = 1;
 
-    cout << "Costo de T a E: " << costosT_E[E] << endl; // Debugging
-
     indice = E;
     while (indice != T && indice != 0)
     {
         caminoT_E[contadorT2] = antT_E[indice];
         contadorT2++;
-
         aux = indice;
         indice = antT_E[indice];
         int nuevoPeso = grafoCiudadesT.pesoArista(indice, aux) * 2;
         grafoCiudadesT.agregarAristaNoDirigida(indice, aux, nuevoPeso);
-        cout << "En el camino de T a E: ciudad " << indice << " -> " << aux << " con nuevo peso " << nuevoPeso << endl; // Debugging
     }
     contadorT2--;
 
-    int **arraysDijkstraE_P = grafoCiudadesT.dijkstra(T);
+    int **arraysDijkstraE_P = grafoCiudadesT.dijkstra(E);
     int *costosE_P = arraysDijkstraE_P[0];
     int *antE_P = arraysDijkstraE_P[1];
     costoTotalT += costosE_P[P];
@@ -168,25 +144,17 @@ int main()
     int *caminoE_P = new int[10];
     int contadorT3 = 1;
 
-    cout << "Costo de E a P: " << costosE_P[P] << endl; // Debugging
-
     indice = P;
     while (indice != E && indice != 0)
     {
         caminoE_P[contadorT3] = antE_P[indice];
         contadorT3++;
-
         aux = indice;
         indice = antE_P[indice];
         int nuevoPeso = grafoCiudadesT.pesoArista(indice, aux) * 2;
         grafoCiudadesT.agregarAristaNoDirigida(indice, aux, nuevoPeso);
-        cout << "En el camino de E a P: ciudad " << indice << " -> " << aux << " con nuevo peso " << nuevoPeso << endl; // Debugging
     }
     contadorT3--;
-
-    // Debugging - showing final costs
-    cout << "Costo total E: " << costoTotalE << endl;
-    cout << "Costo total T: " << costoTotalT << endl;
 
     if (costoTotalE <= costoTotalT)
     {

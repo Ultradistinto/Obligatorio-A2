@@ -85,24 +85,24 @@ public:
     {
         int **ret = new int *[2];
         // Distancia desde el origen al resto del grafo
-        ret[0] = new int[cantVertices];
+        ret[0] = new int[cantVertices + 1];
         // Anterior desde cualquier valor hasta el origen
-        ret[1] = new int[cantVertices];
-        bool *visitado = new bool[cantVertices];
+        ret[1] = new int[cantVertices + 1];
+        bool *visitado = new bool[cantVertices + 1];
 
-        for (int i = 0; i < cantVertices; i++)
+        for (int i = 1; i <= cantVertices; i++)
         {
             ret[0][i] = 2147483647;
             visitado[i] = false;
         }
         ret[0][desde] = 0;
         ret[1][desde] = 0;
-        for (int i = 0; i <= cantVertices; i++)
+        for (int i = 1; i <= cantVertices; i++)
         {
 
             int u = minDistancia(ret[0], visitado);
             visitado[u] = true;
-            for (int v = 0; v < cantVertices; v++)
+            for (int v = 1; v <= cantVertices; v++)
             {
                 if (!visitado[v] && matriz[u][v] != 0 && ret[0][u] != 2147483647 && ret[0][u] + matriz[u][v] < ret[0][v])
                 {
