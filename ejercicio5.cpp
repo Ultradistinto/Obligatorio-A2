@@ -13,11 +13,11 @@ int* caminoInvertido(int* aRecorrer, int desde){
     int* ret = new int[largo];
     paso = desde;
     while (paso != 0){
-        ret[largo] = paso; 
+        ret[largo-1] = paso; 
         paso = aRecorrer[paso];
         largo --;
     }
-    ret[0] = largo - 1;
+    ret[0] = largo;
     return ret;
 }
 
@@ -74,13 +74,16 @@ int main()
             if(minimaDistancia[0][i] < min){
                 min = minimaDistancia[0][i];
                 idSiguienteMision = posiblesMisiones[i];
+                
             }
         }
         int* caminoAlaMision = caminoInvertido(minimaDistancia[1], ciudadSalida);
-        for (int i = 1; i < caminoAlaMision[0]; i++){
+        for (int i = 1; i <= caminoAlaMision[0]; i++){
             cout << listaNombreCiudades[caminoAlaMision[i]]; //recorrido desde C hasta donde se hace la mision
             cout << " -> ";
         }
+        cout << listaNombreCiudades[idSiguienteMision];
+        cout << " -> ";
         cout << "Mision: ";
         cout << listaNombreMisiones[idSiguienteMision];
         cout << " - ";

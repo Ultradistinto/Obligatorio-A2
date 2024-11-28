@@ -75,7 +75,7 @@ public:
         //Distancia desde el origen al resto del grafo
         ret[0] = new int[cantVertices];
         //Anterior desde cualquier valor hasta el origen
-        ret[1] = new int[cantVertices];
+        ret[1] = new int[cantVertices+1];
         bool* visitado = new bool[cantVertices+1];
 
         for (int i = 1; i <= cantVertices; i++) {
@@ -88,7 +88,6 @@ public:
         
             int u = minDistancia(ret[0], visitado);
             visitado[u] = true;
-
             for (int v = 0; v < cantVertices; v++) {
                 if (!visitado[v] && matriz[u][v] != 0 &&  ret[0][u] != 2147483647 && ret[0][u] + matriz[u][v] < ret[0][v]) {
                     ret[0][v] = ret[0][u] + matriz[u][v];
