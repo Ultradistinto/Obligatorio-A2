@@ -29,7 +29,6 @@ int main()
     nuevoGrafo grafoMisiones(M, 0);
     int *listaIdCiudadMisiones = new int[M + 1];
     string *listaNombreMisiones = new string[M + 1];
-
     for (int i = 0; i < M; i++)
     {
         cin >> idMision >> nombreMision >> idCiudad >> dep;
@@ -42,6 +41,7 @@ int main()
         listaIdCiudadMisiones[idMision] = idCiudad;
         listaNombreMisiones[idMision] = nombreMision;
     }
+    
     int C, O;
     cin >> C >> O;
     int ciudadInicio = O;
@@ -52,6 +52,7 @@ int main()
         cin >> idCiudad >> nombreCiudad;
         listaNombreCiudades[idCiudad] = nombreCiudad;
     }
+    
     int E, ciudadSalida, ciudadEntrada, tiempo;
     cin >> E;
     for (int i = 0; i < E; i++)
@@ -59,12 +60,15 @@ int main()
         cin >> ciudadSalida >> ciudadEntrada >> tiempo;
         grafoCiudades.agregarAristaNoDirigida(ciudadSalida, ciudadEntrada, tiempo);
     }
+    
     cout << "Ciudad inicial: ";
-    cout << ciudadSalida;
+    
+    cout << listaNombreCiudades[ciudadSalida]<<endl;
+    
     int* posiblesMisiones = grafoMisiones.getMisionesPosibles();
     while (posiblesMisiones[0] != 0){
         int min = 2147483647;
-        int** minimaDistancia = grafoCiudades.dijkstra(C);
+        int** minimaDistancia = grafoCiudades.dijkstra(ciudadSalida);
         int idSiguienteMision = 0;
         for (int i = 0; i < M && posiblesMisiones[i] != 0; i++){
             if(minimaDistancia[0][i] < min){
@@ -72,7 +76,7 @@ int main()
                 idSiguienteMision = posiblesMisiones[i];
             }
         }
-        int* caminoAlaMision = caminoInvertido(minimaDistancia[1], C);
+        int* caminoAlaMision = caminoInvertido(minimaDistancia[1], ciudadSalida);
         for (int i = 1; i < caminoAlaMision[0]; i++){
             cout << listaNombreCiudades[caminoAlaMision[i]]; //recorrido desde C hasta donde se hace la mision
             cout << " -> ";
