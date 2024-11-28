@@ -3,7 +3,7 @@
 #include <iostream>
 #include <limits>
 #include "tads/nuevoGrafo.cpp"
-#include "tads/pair.cpp"
+//#include "tads/pair.cpp"
 
 using namespace std;
 
@@ -37,9 +37,9 @@ int main()
         grafoCiudadesT.agregarAristaNoDirigida(ciudadSalida, ciudadLlegada, tiempo);
     }
 
-    int **arraysDijkstraInicial = grafoCiudadesE.dijkstra(S);
-    int *costos = arraysDijkstraInicial[0];
-    int *ant = arraysDijkstraInicial[1];
+     myPair<int *, int *> arraysDijkstraInicial = grafoCiudadesE.dijkstra(S);
+    int *costos = arraysDijkstraInicial.getFst();
+    int *ant = arraysDijkstraInicial.getSnd();
 
     int costoTotalE = costos[E];
     int *caminoS_E = new int[10];
@@ -58,9 +58,9 @@ int main()
     }
     contadorE1--;
 
-    int **arraysDijkstraE_T = grafoCiudadesE.dijkstra(E);
-    int *costosE_T = arraysDijkstraE_T[0];
-    int *antE_T = arraysDijkstraE_T[1];
+     myPair<int *, int *> arraysDijkstraE_T = grafoCiudadesE.dijkstra(E);
+    int *costosE_T = arraysDijkstraE_T.getFst();
+    int *antE_T = arraysDijkstraE_T.getSnd();
     costoTotalE += costosE_T[T];
 
     int *caminoE_T = new int[10];
@@ -78,9 +78,9 @@ int main()
     }
     contadorE2--;
 
-    int **arraysDijkstraT_P = grafoCiudadesE.dijkstra(T);
-    int *costosT_P = arraysDijkstraT_P[0];
-    int *antT_P = arraysDijkstraT_P[1];
+    myPair<int *, int *> arraysDijkstraT_P = grafoCiudadesE.dijkstra(T);
+    int *costosT_P = arraysDijkstraT_P.getFst();
+    int *antT_P = arraysDijkstraT_P.getSnd();
     costoTotalE += costosT_P[P];
 
     int *caminoT_P = new int[10];
@@ -116,9 +116,9 @@ int main()
     }
     contadorT1--;
 
-    int **arraysDijkstraT_E = grafoCiudadesT.dijkstra(T);
-    int *costosT_E = arraysDijkstraT_E[0];
-    int *antT_E = arraysDijkstraT_E[1];
+     myPair<int *, int *> arraysDijkstraT_E = grafoCiudadesT.dijkstra(T);
+    int *costosT_E = arraysDijkstraT_E.getFst();
+    int *antT_E = arraysDijkstraT_E.getSnd();
     costoTotalT += costosT_E[E];
 
     int *caminoT_E = new int[10];
@@ -136,9 +136,9 @@ int main()
     }
     contadorT2--;
 
-    int **arraysDijkstraE_P = grafoCiudadesT.dijkstra(E);
-    int *costosE_P = arraysDijkstraE_P[0];
-    int *antE_P = arraysDijkstraE_P[1];
+     myPair<int *, int *> arraysDijkstraE_P = grafoCiudadesT.dijkstra(E);
+    int *costosE_P = arraysDijkstraE_P.getFst();
+    int *antE_P = arraysDijkstraE_P.getSnd();
     costoTotalT += costosE_P[P];
 
     int *caminoE_P = new int[10];

@@ -1,4 +1,6 @@
 #include <iostream>
+#include <climits>
+#include "minHeap.cpp"
 using namespace std;
 
 class nuevoGrafo
@@ -81,37 +83,108 @@ public:
         }
         return minIndex;
     }
-    int **dijkstra(int desde)
+     bool *initVisitados(int n)
     {
-        int **ret = new int *[2];
-        // Distancia desde el origen al resto del grafo
-        ret[0] = new int[cantVertices + 1];
-        // Anterior desde cualquier valor hasta el origen
-        ret[1] = new int[cantVertices + 1];
-        bool *visitado = new bool[cantVertices + 1];
-
-        for (int i = 1; i <= cantVertices; i++)
+        bool *visitados = new bool[n + 1];
+        for (int i = 0; i < n + 1; i++)
         {
-            ret[0][i] = 2147483647;
-            visitado[i] = false;
+            visitados[i] = false;
         }
-        ret[0][desde] = 0;
-        ret[1][desde] = 0;
+        return visitados;
+    }
+    int *initCostos(int n, int origen)
+    {
+        if (origen < 0)
+        {
+            cerr << "Error: origen está fuera del rango en initCostos." << endl;
+            return nullptr;
+        }
+        if (origen > n)
+        {
+            cerr << "Error: origen es mayor a n." << " El n es: " << n << " El origen es: " << origen << endl;
+            return nullptr;
+        }
+
+        int *costos = new int[n + 1];
+        for (int i = 0; i < n + 1; i++)
+        {
+            costos[i] = INT_MAX;
+        }
+        costos[origen] = 0;
+        return costos;
+    }
+    int *initAnterior(int n)
+    {
+        int *ant = new int[n + 1];
+        for (int i = 0; i < n + 1; i++)
+        {
+            ant[i] = -1;
+        }
+        return ant;
+    }
+    int contarAdyacentes(int v)
+    {
+        int numAdyacentes = 0;
         for (int i = 1; i <= cantVertices; i++)
         {
-
-            int u = minDistancia(ret[0], visitado);
-            visitado[u] = true;
-            for (int v = 1; v <= cantVertices; v++)
+            if (matriz[v][i] != 0)
             {
-                if (!visitado[v] && matriz[u][v] != 0 && ret[0][u] != 2147483647 && ret[0][u] + matriz[u][v] < ret[0][v])
-                {
-                    ret[0][v] = ret[0][u] + matriz[u][v];
-                    ret[1][v] = u;
-                }
+                numAdyacentes++;
             }
         }
-        return ret;
+        return numAdyacentes;
+    }
+
+    int *verticesAdy(int v, int numAdyacentes)
+    {
+        int *adyacentes = new int[numAdyacentes];
+        int indice = 0;
+        for (int i = 1; i <= cantVertices; i++)
+        {
+            if (matriz[v][i] != 0)
+            {
+                adyacentes[indice] = i;
+                indice++;
+            }
+        }
+        return adyacentes;
+    }
+    myPair<int *, int *> dijkstra(int origen)
+    {
+
+        bool *visitados = initVisitados(cantVertices);
+        int *costos = initCostos(cantVertices, origen);
+
+        int *ant = initAnterior(cantVertices);
+        minHeap CP(cantVertices * cantVertices);
+
+        CP.add(origen, 0);
+
+        while (!CP.isEmpty())
+        {
+            int v = CP.pop().getFst();
+            visitados[v] = true;
+
+            int numAdyacentes = contarAdyacentes(v);
+            int *adyacentes = verticesAdy(v, numAdyacentes);
+
+            for (int i = 0; i < numAdyacentes; i++)
+            {
+                int w = adyacentes[i];
+                int newCost = costos[v] + matriz[v][w];
+                if (!visitados[w] && costos[w] > newCost)
+                {
+                    costos[w] = newCost;
+                    ant[w] = v;
+                    CP.add(w, newCost);
+                }
+            }
+
+            delete[] adyacentes;
+        }
+
+        delete[] visitados;
+        return myPair<int *, int *>(costos, ant);
     }
     int pesoArista(int i, int j)
     {

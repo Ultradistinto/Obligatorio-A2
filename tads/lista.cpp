@@ -51,4 +51,11 @@ public:
     {
         return cantidad;
     }
+    int obtenerHead()
+    {
+        int ret = this->head->dato;
+        this->head = this->head->sig;
+        this->cantidad--;
+        return ret;
+    }
 };

@@ -1,28 +1,20 @@
 #include <iostream>
 #include <string>
 #include "tads/nuevoGrafo.cpp"
+#include "tads/lista.cpp"
 
 using namespace std;
-int *caminoInvertido(int *aRecorrer, int desde)
+lista<int> caminoInvertido(int *aRecorrer, int desde)
 {
-    int largo = 1;
     int paso = desde;
+    lista<int> ret;
+    ret.agregar(paso);
     while (paso != 0)
     {
-        largo++;
         paso = aRecorrer[paso];
-    }
-    // cout << desde<<endl;
-    int *ret = new int[largo];
-    paso = desde;
-    ret[0] = largo - 1;
-    while (paso != 0)
-    {
-        // cout << paso;
-        //  cout << "  " <<endl;
-        ret[largo - 1] = paso;
-        paso = aRecorrer[paso];
-        largo--;
+        if(paso != 0){
+            ret.agregar(paso); 
+        }
     }
     return ret;
 }
@@ -75,22 +67,29 @@ int main()
     while (posiblesMisiones[0] != 0)
     {
         int min = 2147483647;
-        int **minimaDistancia = grafoCiudades.dijkstra(ciudadInicio);
+        myPair<int *, int *>minimaDistancia = grafoCiudades.dijkstra(ciudadInicio);
+        int* distancias = minimaDistancia.getFst();
+        int* anteriores = minimaDistancia.getSnd();
         int idSiguienteMision = 0;
         for (int i = 0; i < M && posiblesMisiones[i] != 0; i++)
         {
-            if (minimaDistancia[0][listaIdCiudadMisiones[posiblesMisiones[i]]] < min)
+            if (distancias[listaIdCiudadMisiones[posiblesMisiones[i]]] < min)
             {
-                min = minimaDistancia[0][listaIdCiudadMisiones[posiblesMisiones[i]]];
+                min = distancias[listaIdCiudadMisiones[posiblesMisiones[i]]];
                 idSiguienteMision = posiblesMisiones[i];
                 ciudadInicio = listaIdCiudadMisiones[posiblesMisiones[i]];
             }
         }
-        int *caminoAlaMision = caminoInvertido(minimaDistancia[1], ciudadInicio);
-        for (int i = 1; i <= caminoAlaMision[0]; i++)
-        {
-            cout << listaNombreCiudades[caminoAlaMision[i]]; // recorrido desde C hasta donde se hace la mision
-            cout << " -> ";
+        lista<int> caminoAlaMision = caminoInvertido(anteriores, ciudadInicio);
+        int aux = 0;
+        while (caminoAlaMision.obtenerCantidad() != 0)
+        {   
+            if(aux != 0){
+                int ciudadAprintear = caminoAlaMision.obtenerHead();
+                cout << listaNombreCiudades[ciudadAprintear]; // recorrido desde C hasta donde se hace la mision
+                cout << " -> ";
+            }
+            aux++;
         }
         cout << "Mision: ";
         cout << listaNombreMisiones[idSiguienteMision];

@@ -75,6 +75,10 @@ public:
         array = new myPair<int, int>[cantidadEsperada + 1];
         cantidad = 0;
     }
+    bool isEmpty()
+    {
+        return cantidad == 0;
+    }
 
     void add(int id, int precio)
     {
