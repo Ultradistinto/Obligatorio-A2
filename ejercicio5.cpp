@@ -12,12 +12,12 @@ int* caminoInvertido(int* aRecorrer, int desde){
     }
     int* ret = new int[largo];
     paso = desde;
+    ret[0] = largo-1;
     while (paso != 0){
         ret[largo-1] = paso; 
         paso = aRecorrer[paso];
         largo --;
     }
-    ret[0] = largo;
     return ret;
 }
 
@@ -64,7 +64,7 @@ int main()
     cout << "Ciudad inicial: ";
     
     cout << listaNombreCiudades[ciudadSalida]<<endl;
-    
+    int distanciaTotal = 0;
     int* posiblesMisiones = grafoMisiones.getMisionesPosibles();
     while (posiblesMisiones[0] != 0){
         int min = 2147483647;
@@ -72,9 +72,9 @@ int main()
         int idSiguienteMision = 0;
         for (int i = 0; i < M && posiblesMisiones[i] != 0; i++){
             if(minimaDistancia[0][i] < min){
-                min = minimaDistancia[0][i];
+                min = minimaDistancia[0][posiblesMisiones[i]];
                 idSiguienteMision = posiblesMisiones[i];
-                
+                ciudadSalida = posiblesMisiones[i];
             }
         }
         int* caminoAlaMision = caminoInvertido(minimaDistancia[1], ciudadSalida);
@@ -82,17 +82,18 @@ int main()
             cout << listaNombreCiudades[caminoAlaMision[i]]; //recorrido desde C hasta donde se hace la mision
             cout << " -> ";
         }
-        cout << listaNombreCiudades[idSiguienteMision];
-        cout << " -> ";
         cout << "Mision: ";
         cout << listaNombreMisiones[idSiguienteMision];
         cout << " - ";
-        cout << listaIdCiudadMisiones[idSiguienteMision];
+        cout << listaNombreCiudades[idSiguienteMision];
         cout << " - Tiempo de viaje: ";
         cout << min << endl;
+        distanciaTotal += min;
         grafoMisiones.misionCompletada(idSiguienteMision);
         posiblesMisiones = grafoMisiones.getMisionesPosibles();
     }
-
+    cout << "Misiones ejecutadas con exito."<<endl;
+    cout << "Tiempo total de viaje: ";
+    cout << distanciaTotal <<endl;
     return 0;
 }
