@@ -75,10 +75,10 @@ public:
         //Distancia desde el origen al resto del grafo
         ret[0] = new int[cantVertices];
         //Anterior desde cualquier valor hasta el origen
-        ret[1] = new int[cantVertices+1];
-        bool* visitado = new bool[cantVertices+1];
+        ret[1] = new int[cantVertices];
+        bool* visitado = new bool[cantVertices];
 
-        for (int i = 1; i <= cantVertices; i++) {
+        for (int i = 1; i < cantVertices; i++) {
             ret[0][i] = 2147483647;
             visitado[i] = false;
         }

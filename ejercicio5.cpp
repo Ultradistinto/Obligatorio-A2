@@ -88,7 +88,7 @@ int main()
         cout << "Mision: ";
         cout << listaNombreMisiones[idSiguienteMision];
         cout << " - ";
-        cout << listaNombreCiudades[idSiguienteMision];
+        cout << listaNombreCiudades[listaIdCiudadMisiones[idSiguienteMision]];
         cout << " - Tiempo de viaje: ";
         cout << min << endl;
         distanciaTotal += min;
