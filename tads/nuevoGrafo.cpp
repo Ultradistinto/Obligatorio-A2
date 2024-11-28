@@ -45,19 +45,23 @@ public:
         bool conseguiMision = false;
         int *ret = new int[cantVertices + 1]();
         int mison = 0;
-        for (int i = 0; i <= cantVertices && !conseguiMision; i++)
+        for (int i = 1; i <= cantVertices; i++)
         {
-            bool dependencia = false;
-            for (int j = 0; j <= cantVertices && !dependencia; j++)
+            if (!conseguiMision)
             {
-                if (matriz[i][j] == 1 || matriz[i][j] == -1)
+                int dependencia = 0;
+                for (int j = 1; j <= cantVertices; j++)
                 {
-                    dependencia = true;
-                }
-                if (j = cantVertices && !dependencia)
-                {
-                    ret[mison] = i;
-                    mison++;
+                    if (matriz[i][j] == 1 || matriz[i][j] == -1)
+                    {
+                        dependencia++;
+                    }
+                    if (j == cantVertices && dependencia == 0)
+                    {
+                        ret[mison] = i;
+                        mison++;
+                        conseguiMision = true;
+                    }
                 }
             }
         }
@@ -81,19 +85,19 @@ public:
     {
         int **ret = new int *[2];
         // Distancia desde el origen al resto del grafo
-        ret[0] = new int[cantVertices + 1];
+        ret[0] = new int[cantVertices];
         // Anterior desde cualquier valor hasta el origen
-        ret[1] = new int[cantVertices + 1];
-        bool *visitado = new bool[cantVertices + 1];
+        ret[1] = new int[cantVertices];
+        bool *visitado = new bool[cantVertices];
 
-        for (int i = 1; i <= cantVertices; i++)
+        for (int i = 0; i < cantVertices; i++)
         {
             ret[0][i] = 2147483647;
             visitado[i] = false;
         }
         ret[0][desde] = 0;
         ret[1][desde] = 0;
-        for (int i = 1; i <= cantVertices; i++)
+        for (int i = 0; i <= cantVertices; i++)
         {
 
             int u = minDistancia(ret[0], visitado);
